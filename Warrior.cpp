@@ -2,9 +2,17 @@
 #include <cstdlib>
 #include <ctime>
 #include <iomanip>
+#include <cmath>
+#include <string>
+#include <limits>
+// #include <pthread.h>
+// #include <thread>
+// #include <chrono>
 #include "Warrior.hpp"
 
-/* Reduction Damage Percent = armor_stat * 6 */
+/* Reduction Damage Percent = armor_stat * 0.05
+ * If guard_status is up then, the warrior has a 15% chance of decreasing the
+ * armor stat of the opponent by 2 with weakening_strike. */
 
 using namespace std;
 
@@ -26,7 +34,7 @@ int Warrior::generate_seed() {
 }
 
 void Warrior::set_health_stat() {
-    health_stat = static_cast<double>((rand() % 10) + 1.0);
+    health_stat = static_cast<double>((rand() % 26) + 25.0);
 }
 
 void Warrior::set_attack_stat() {
@@ -45,6 +53,14 @@ void Warrior::set_guard_status() {
     }
 }
 
+void Warrior::set_weakening_strike_status() {
+    if (((rand() % 100) + 1) <= 15) {
+        weakening_strike_status = true;
+    } else {
+        weakening_strike_status = false;
+    }
+}
+
 void Warrior::display_current_stats(int warrior_number) {
     cout << fixed << setprecision(1);
     if (warrior_number == 1) {
@@ -58,11 +74,65 @@ void Warrior::display_current_stats(int warrior_number) {
     cout << setw(15) << boolalpha << "Guard Status: " << guard_status << endl << endl;
 }
 
+void Warrior::attack(int warrior_number) {
+    if (guard_status == true) {
+        weakening_strike(warrior_number);
+    } else {
+        sword_strike(warrior_number);
+    }
+}
+
+void Warrior::weakening_strike(int warrior_number) {
+    if (warrior_number == 1) {
+        if (weakening_strike_status == true) {
+            cout << "Warrior One uses weakening strike with their " << attack_stat << " attack stat." << endl; 
+        } else {
+            cout << "Warrior One uses weakening strike with their " << attack_stat << " attack stat." << endl;
+        }
+    } else {
+        if (weakening_strike_status == true) {
+            cout << "Warrior Two uses weakening strike with their " << attack_stat << " attack stat." << endl;
+        } else {
+            cout << "Warrior Two uses weakening strike with their " << attack_stat << " attack stat." << endl;
+        }
+    }
+}
+
+void Warrior::sword_strike(int warrior_number) {
+    if (warrior_number == 1) {
+        cout << "Warrior One uses sword strike with their " << attack_stat << " attack stat." << endl;
+    } else {
+        cout << "Warrior Two uses sword strike and deals " << attack_stat << " slashing damage to Warrior One." << endl;
+    }
+}
+
 double Warrior::get_health_stat() {
     return health_stat;
 }
 
-Warrior::~Warrior() {
+double Warrior::get_attack_stat() {
+    return attack_stat;
 }
 
+double Warrior::get_armor_stat() {
+    return armor_stat;
+}
 
+bool Warrior::get_guard_status() {
+    return guard_status;
+}
+
+bool Warrior::get_weakening_strike_status() {
+    return weakening_strike_status;
+}
+
+void Warrior::update_health_stat(double x) {
+    health_stat = x;
+}
+
+void Warrior::update_armor_stat(double x) {
+    armor_stat = x;
+}
+
+Warrior::~Warrior() {
+}
