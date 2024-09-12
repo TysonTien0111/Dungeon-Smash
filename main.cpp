@@ -18,7 +18,7 @@ void battle(Warrior& one, Warrior& two, double w_one_dmg_reduction, double w_two
     while (cin.get() != '\n') {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Please press enter to continue you fucking moron..." << endl;
+            cout << "Please press enter to continue..." << endl;
     }
 
     system("cls");
